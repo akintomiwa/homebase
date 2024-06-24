@@ -92,7 +92,7 @@ const App: React.FC = () => {
         const fetchProjects = async () => {
             try {
                 console.log('Fetching projects...');
-                const response = await axios.get<Project[]>('http://localhost:8000/api/projects/');
+                const response = await axios.get<Project[]>('http://localhost:80/api/projects/');
                 console.log('Projects fetched:', response.data);
                 setProjects(response.data); // Set the state with fetched data
             } catch (error) {
