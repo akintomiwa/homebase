@@ -40,9 +40,6 @@ jobs:
             echo "Deployment Complete."
           EOF
 
-         
-
-
 
 # name: Deploy Docker Container
 
