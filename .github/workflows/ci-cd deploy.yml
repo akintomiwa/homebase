@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   build-and-deploy:
@@ -15,7 +12,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      
+
       # Build and push backend Docker image
       - name: Build and push backend
         env:
@@ -50,4 +47,3 @@ jobs:
             docker pull yourdockerhubusername/backend:latest
             docker pull yourdockerhubusername/frontend:latest
             docker-compose -f /path/to/your/docker-compose.yml up -d
-
