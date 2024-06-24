@@ -28,7 +28,8 @@ jobs:
           VPS_SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
           ssh -o StrictHostKeyChecking=no root@141.136.42.157 << 'EOF'
-            scp -o StrictHostKeyChecking=no docker-compose.yml root@141.136.42.157:docker-compose.yml
+            scp -v -o StrictHostKeyChecking=no docker-compose.yml root@141.136.42.157:/docker-compose.yml
+
             echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username aakinonigbinde --password-stdin
             docker pull aakinonigbinde/myapp-backend:latest
             echo "Backend pull complete."
