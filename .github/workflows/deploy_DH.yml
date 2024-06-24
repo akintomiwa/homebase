@@ -28,7 +28,7 @@ jobs:
           VPS_SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
           ssh -o StrictHostKeyChecking=no root@141.136.42.157 << 'EOF'
-            echo $VPS_SSH_PRIVATE_KEY | docker login -u $DOCKER_USERNAME --password-stdin
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
             docker pull aakinonigbinde/backend:latest
             echo "Backend pull complete."
             docker pull aakinonigbinde/frontend:latest
