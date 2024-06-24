@@ -5,9 +5,9 @@ on:
     branches:
       - main
 
-  jobs:
-    deploy:
-      runs-on: ubuntu-latest
+    jobs:
+      deploy:
+        runs-on: ubuntu-latest
     
     
 
@@ -31,7 +31,7 @@ on:
       - name: SSH and Docker commands
         run: |
           ssh -o StrictHostKeyChecking=no root@141.136.42.157 << 'EOF'
-            echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ github.repository_owner }} --password-stdin
+            echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_PASSWORD }} --password-stdin
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}"
             docker pull aakinonigbinde/backend:latest
             echo "Backend pull complete."
