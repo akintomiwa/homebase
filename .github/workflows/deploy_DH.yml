@@ -19,8 +19,6 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: SSH and Docker commands
-             env:
-          DOCKER_TOKEN: ${{ env.DOCKER_TOKEN }}
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
