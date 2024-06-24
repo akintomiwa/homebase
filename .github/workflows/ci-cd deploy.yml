@@ -25,17 +25,17 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           docker build -t aakinonigbinde/backend:latest ./backend
-          echo "$password" | docker login --username foo --password-stdin
+          echo  "$DOCKER_PASSWORD" | docker login --$DOCKER_USERNAME --password-stdin
           docker push aakinonigbinde/backend:latest
 
       # Build and push frontend Docker image
       - name: Build and push frontend
         env:
-          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           docker build -t aakinonigbinde/frontend:latest ./frontend
-          echo "$password" | docker login --username foo --password-stdin
+          echo "$password" | docker login login --$DOCKER_USERNAME --password-stdin
           docker push aakinonigbinde/frontend:latest
 
       # SSH into VPS and deploy containers using Docker Compose

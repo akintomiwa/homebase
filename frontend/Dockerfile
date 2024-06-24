@@ -34,8 +34,8 @@ COPY package-lock.json ./
 # Install dependencies
 RUN npm install
 
-# Copy the remaining application code to the working directory
-COPY . .
+# # Copy the remaining application code to the working directory
+# COPY . .
 
 # Build the React app for production
 RUN npm run build
