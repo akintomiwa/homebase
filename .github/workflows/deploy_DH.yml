@@ -29,9 +29,9 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no root@141.136.42.157 << 'EOF'
             echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username aakinonigbinde --password-stdin
-            docker pull aakinonigbinde/backend:latest
+            docker pull aakinonigbinde/myapp-backend:latest
             echo "Backend pull complete."
-            docker pull aakinonigbinde/frontend:latest
+            docker pull aakinonigbinde/myapp-frontend:latest
             echo "Frontend pull complete."
             
             docker-compose -f /homebase/docker-compose.yml down
