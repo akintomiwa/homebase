@@ -17,10 +17,6 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      
-      - name: Upload docker-compose.yml to VPS
-        run: |
-          scp -o StrictHostKeyChecking=no -i ${{ secrets.VPS_SSH_PRIVATE_KEY }} docker-compose.yml root@141.136.42.157:/homebase/docker-compose.yml
 
       - name: SSH and Docker commands
         env:
@@ -32,14 +28,15 @@ jobs:
           VPS_SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
           ssh -o StrictHostKeyChecking=no root@141.136.42.157 << 'EOF'
+            scp -o StrictHostKeyChecking=no ./docker-compose.yml root@141.136.42.157:docker-compose.yml
             echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username aakinonigbinde --password-stdin
             docker pull aakinonigbinde/myapp-backend:latest
             echo "Backend pull complete."
             docker pull aakinonigbinde/myapp-frontend:latest
             echo "Frontend pull complete."
             
-            docker-compose -f /homebase/docker-compose.yml down
-            docker-compose -f /homebase/docker-compose.yml up -d
+            docker-compose -f docker-compose.yml down
+            docker-compose -f docker-compose.yml up -d
             echo "Deployment Complete."
           EOF
 
