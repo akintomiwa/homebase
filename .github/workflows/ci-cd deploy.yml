@@ -20,7 +20,7 @@ jobs:
       
       - name: SSH and Docker commands
         run: |
-          ssh -o StrictHostKeyChecking=no root@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no root@141.136.42.157 << 'EOF'
             echo ${{ secrets.DOCKER_PASSWORD }} | docker login ghcr.io -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}"
             docker pull aakinonigbinde/backend:latest
@@ -29,6 +29,23 @@ jobs:
             echo "Frontend pull complete."
             docker-compose -f /homebase/docker-compose.yml up -d
             echo "Deployment Complete."
+
+            docker stop frontend
+            docker rm frontend
+            docker stop backend
+            docker rm backend
+
+            docker run -p 8000:8000 -d --name backend aakinonigbinde/backend:latest
+            docker run -p 3000:3000 -d --name frontend aakinonigbinde/frontend:latest
+          EOF
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          VPS_HOST: ${{ secrets.SSH_HOST }}
+          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+          VPS_SSH_PORT: ${{ secrets.VPS_SSH_PORT }}
+
             
 
       # # Build and push backend Docker image
