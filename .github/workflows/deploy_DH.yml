@@ -5,12 +5,10 @@ on:
     branches:
       - main
 
-    jobs:
-      deploy:
-        runs-on: ubuntu-latest
-    
-    
-
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+  
     steps:
       # SSH into VPS and deploy containers using Docker Compose
       # - name: Deploy to VPS
