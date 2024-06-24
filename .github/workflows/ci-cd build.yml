@@ -43,8 +43,9 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         docker build -t aakinonigbinde/backend:latest ./backend
-        echo  "$DOCKER_PASSWORD" | docker login --"$DOCKER_USERNAME" foo --password-stdin
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login --${{ secrets.DOCKER_USERNAME }} foo --password-stdin
         docker push aakinonigbinde/backend:latest
+        echo "Backend Docker image built and pushed successfully!"
 
     # Build and push frontend Docker image
     - name: Build and push frontend
@@ -53,8 +54,9 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         docker build -t aakinonigbinde/frontend:latest ./frontend
-        echo "$DOCKER_PASSWORD" | docker login  --$DOCKER_USERNAME --password-stdin
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login  --${{ secrets.DOCKER_USERNAME }} --password-stdin
         docker push aakinonigbinde/frontend:latest
+        echo "Frontend Docker image built and pushed successfully!"
 
 
     # - name: Login to DockerHub
