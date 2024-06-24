@@ -13,6 +13,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: SSH and Docker commands
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -22,7 +27,7 @@ jobs:
           VPS_SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           VPS_SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i $VPS_SSH_PRIVATE_KEY $VPS_USERNAME@$VPS_HOST << 'EOF'
+          ssh -o StrictHostKeyChecking=no root@141.136.42.157 << 'EOF'
             echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
             docker pull aakinonigbinde/backend:latest
             echo "Backend pull complete."
