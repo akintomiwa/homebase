@@ -5,21 +5,52 @@ on:
     branches:
       - main
 
+  jobs:
+    deploy:
+      runs-on: ubuntu-latest
+    
+    
+
     steps:
       # SSH into VPS and deploy containers using Docker Compose
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-          port: ${{ secrets.VPS_SSH_PORT }}
-          script: |
-            ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
-            docker login -u $DOCKER_USERNAME --password-stdin <<< ${{ secrets.DOCKER_PASSWORD }}
-            docker pull aakinonigbinde/myapp-backend:latest
-            docker pull aakinonigbinde/myapp-frontend:latest
-            docker-compose -f /path/to/your/docker-compose.yml up -d
-  
+      # - name: Deploy to VPS
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.VPS_HOST }}
+      #     username: ${{ secrets.VPS_USERNAME }}
+      #     key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+      #     port: ${{ secrets.VPS_SSH_PORT }}
+      #     script: |
+      #       ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+      #       docker login -u $DOCKER_USERNAME --password-stdin <<< ${{ secrets.DOCKER_PASSWORD }}
+      #       docker pull aakinonigbinde/myapp-backend:latest
+      #       docker pull aakinonigbinde/myapp-frontend:latest
+      #       docker-compose -f /path/to/your/docker-compose.yml up -d
+      #       echo "Deployment Complete."
+
+      - name: SSH and Docker commands
+        run: |
+          ssh -o StrictHostKeyChecking=no root@141.136.42.157 << 'EOF'
+            echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ github.repository_owner }} --password-stdin
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}"
+            docker pull aakinonigbinde/backend:latest
+            echo "Backend pull complete."
+            docker pull aakinonigbinde/frontend:latest
+            echo "Frontend pull complete."
+            docker-compose -f /homebase/docker-compose.yml up -d
+            echo "Deployment Complete."
+
+            docker stop frontend
+            docker rm frontend
+            docker stop backend
+            docker rm backend
+
+            docker run -p 8000:8000 -d --name backend aakinonigbinde/backend:latest
+            docker run -p 3000:3000 -d --name frontend aakinonigbinde/frontend:latest
+          EOF
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
 
        
