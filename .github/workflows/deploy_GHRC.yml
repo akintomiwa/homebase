@@ -1,0 +1,50 @@
+# name: Deploy Docker Container
+
+# on:
+#   workflow_run:
+#     workflows: ["Build and Push Docker Image"]
+#     types:
+#       - completed
+
+# env: 
+#   REGISTRY: ghcr.io/aakinonigbinde/homebase
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up SSH
+#         uses: webfactory/ssh-agent@v0.5.3
+#         with:
+#           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+#       - name: SSH and Docker commands
+#         run: |
+#           ssh -o StrictHostKeyChecking=no root@141.136.42.157 << 'EOF'
+#             echo ${{ secrets.TOKEN_PAT }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
+#             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}"
+#             docker pull aakinonigbinde/backend:latest
+#             echo "Backend pull complete."
+#             docker pull aakinonigbinde/frontend:latest
+#             echo "Frontend pull complete."
+#             docker-compose -f /homebase/docker-compose.yml up -d
+#             echo "Deployment Complete."
+
+#             docker stop frontend
+#             docker rm frontend
+#             docker stop backend
+#             docker rm backend
+
+#             docker run -p 8000:8000 -d --name backend aakinonigbinde/backend:latest
+#             docker run -p 3000:3000 -d --name frontend aakinonigbinde/frontend:latest
+#           EOF
+#         env:
+#           DOCKER_USERNAME: ${{ github.repository_owner }}
+#           TOKEN_PAT: ${{ secrets.HOMEBASE_REPO_TOKEN }}
+  
+
+       

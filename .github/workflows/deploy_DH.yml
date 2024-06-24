@@ -1,0 +1,25 @@
+name: Deploy Docker Container
+
+on:
+  push:
+    branches:
+      - main
+
+    steps:
+      # SSH into VPS and deploy containers using Docker Compose
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_SSH_PORT }}
+          script: |
+            ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+            docker login -u $DOCKER_USERNAME --password-stdin <<< ${{ secrets.DOCKER_PASSWORD }}
+            docker pull aakinonigbinde/myapp-backend:latest
+            docker pull aakinonigbinde/myapp-frontend:latest
+            docker-compose -f /path/to/your/docker-compose.yml up -d
+  
+
+       
