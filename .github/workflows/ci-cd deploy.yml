@@ -20,7 +20,7 @@ jobs:
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
         run: |
           docker build -t yourdockerhubusername/backend:latest ./backend
-          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+          echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
           docker push yourdockerhubusername/backend:latest
 
       # Build and push frontend Docker image
@@ -30,7 +30,7 @@ jobs:
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
         run: |
           docker build -t yourdockerhubusername/frontend:latest ./frontend
-          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+          echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
           docker push yourdockerhubusername/frontend:latest
 
       # SSH into VPS and deploy containers using Docker Compose
@@ -43,7 +43,7 @@ jobs:
           port: ${{ secrets.VPS_SSH_PORT }}
           script: |
             ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
-            docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+            docker login -u "$DOCKER_HUB_USERNAME" --password-stdin <<< "${{ secrets.DOCKER_HUB_PASSWORD }}"
             docker pull yourdockerhubusername/backend:latest
             docker pull yourdockerhubusername/frontend:latest
             docker-compose -f /path/to/your/docker-compose.yml up -d
