@@ -19,8 +19,9 @@ jobs:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
         run: |
-          docker build -t yourdockerhubusername/backend:latest ./backend
+          docker build -t aakinonigbinde/backend:latest ./backend
           echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
+          echo ${{ secrets.DOCKER_HUB_USERNAME }} | docker login --username ${{ secrets.DOCKER_HUB_USERNAME }} --password ${{ secrets.DOCKER_HUB_PASSWORD }}-stdin
           docker push yourdockerhubusername/backend:latest
 
       # Build and push frontend Docker image
@@ -29,7 +30,7 @@ jobs:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
         run: |
-          docker build -t yourdockerhubusername/frontend:latest ./frontend
+          docker build -t aakinonigbinde/frontend:latest ./frontend
           echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
           docker push yourdockerhubusername/frontend:latest
 
