@@ -11,7 +11,7 @@ jobs:
   
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
@@ -28,13 +28,13 @@ jobs:
           VPS_SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
           ssh -o StrictHostKeyChecking=no root@141.136.42.157 << 'EOF'
-            scp -v -o StrictHostKeyChecking=no ./docker-compose.yml root@141.136.42.157:/docker-compose.yml
-            echo "secure copy complete."
             echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username aakinonigbinde --password-stdin
             docker pull aakinonigbinde/myapp-backend:latest
             echo "Backend pull complete."
             docker pull aakinonigbinde/myapp-frontend:latest
             echo "Frontend pull complete."
+            echo ls
+            echo pwd
             
             docker-compose -f docker-compose.yml down
             docker-compose -f docker-compose.yml up -d
