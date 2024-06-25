@@ -1,3 +1,4 @@
+
 name: Deploy Docker Container
 
 on:
@@ -8,22 +9,52 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+  
     steps:
-      # Checkout code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      
-       - name: Copy docker-compose.yml to VPS
+        
+      - name: SSH and Docker commands
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          VPS_HOST: ${{ secrets.VPS_HOST }}
-          VPS_USERNAME: ${{ secrets.VPS_USERNAME }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          VPS_HOST: ${{ secrets.SSH_HOST }}
+          VPS_USERNAME: ${{ secrets.SSH_USERNAME }}
+          VPS_SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          VPS_SSH_PORT: ${{ secrets.SSH_PORT }}
+        run: |
+          ssh -o StrictHostKeyChecking=no root@141.136.42.157 << 'EOF'
+
+            ls -al 
+            pwd
+            echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username aakinonigbinde --password-stdin
+            docker pull aakinonigbinde/myapp-backend:latest
+            echo "Backend pull complete."
+            docker pull aakinonigbinde/myapp-frontend:latest
+            echo "Frontend pull complete."
+            ls -al 
+            pwd
+
+            mkdir -p ~/.ssh
+            echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            echo "Copying docker-compose.yml to VPS..."
+            ssh-keyscan -H $VPS_HOST >> ~/.ssh/known_hosts
+            scp -o StrictHostKeyChecking=no ./docker-compose.yml $VPS_USERNAME@$VPS_HOST:/home/$VPS_USERNAME/docker-compose.yml
+            echo "Docker-compose.yml copied to VPS."
+            docker-compose -f docker-compose.yml down
+            docker-compose -f docker-compose.yml up -d
+            echo "Deployment Complete."
+          EOF
+
+
+
+
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
