@@ -37,13 +37,9 @@ jobs:
             echo "Backend pull complete."
             docker pull aakinonigbinde/myapp-frontend:latest
             echo "Frontend pull complete."
-            ls -al 
-            pwd
-
             mkdir -p ~/.ssh
             echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
-
             echo "Copying docker-compose.yml to VPS..."
             ssh-keyscan -H 141.136.42.157 >> ~/.ssh/known_hosts
             scp -o StrictHostKeyChecking=no ./docker-compose.yml root@141.136.42.157:/home/host/docker-compose.yml
