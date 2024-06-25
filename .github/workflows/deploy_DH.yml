@@ -24,7 +24,7 @@ jobs:
           SSH_PORT: ${{ secrets.SSH_PORT }}
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
-        run: scp -r -o StrictHostKeyChecking=no ./ root@141.136.42.157:/repo
+        run: scp -r -o StrictHostKeyChecking=no ./* root@141.136.42.157:/repo
         
       - name: SSH and Docker commands
         env:
@@ -43,7 +43,7 @@ jobs:
             echo "Frontend pull complete."
             ls -al 
             pwd
-            
+            cd /repo 
             docker-compose -f docker-compose.yml down
             docker-compose -f docker-compose.yml up -d
             echo "Deployment Complete."
