@@ -44,8 +44,8 @@ jobs:
             echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
             chmod 600 ~/.ssh/id_rsa
             echo "Copying docker-compose.yml to VPS..."
-            ssh-keyscan -H $VPS_HOST >> ~/.ssh/known_hosts
-            scp -o StrictHostKeyChecking=no ./docker-compose.yml $VPS_USERNAME@$VPS_HOST:/home/$VPS_USERNAME/docker-compose.yml
+            ssh-keyscan -H 141.136.42.157 >> ~/.ssh/known_hosts
+            scp -o StrictHostKeyChecking=no ./docker-compose.yml root@141.136.42.157:/home/$VPS_USERNAME/docker-compose.yml
             echo "Docker-compose.yml copied to VPS."
             docker-compose -f docker-compose.yml down
             docker-compose -f docker-compose.yml up -d
