@@ -17,14 +17,6 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      
-      - name: Copy files to VPS
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
-          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-        run: scp -r -o StrictHostKeyChecking=no ./* root@141.136.42.157:/repo
         
       - name: SSH and Docker commands
         env:
@@ -36,6 +28,9 @@ jobs:
           VPS_SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
           ssh -o StrictHostKeyChecking=no root@141.136.42.157 << 'EOF'
+            scp -r -o StrictHostKeyChecking=no ./* root@141.136.42.157:/repo
+            ls -al 
+            pwd
             echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username aakinonigbinde --password-stdin
             docker pull aakinonigbinde/myapp-backend:latest
             echo "Backend pull complete."
