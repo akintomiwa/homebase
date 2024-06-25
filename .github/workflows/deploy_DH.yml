@@ -51,17 +51,8 @@ jobs:
             docker-compose -f docker-compose.yml up -d
             echo "Deployment Complete."
           EOF
+          
 
-
-
-
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          echo "Copying docker-compose.yml to VPS..."
-          ssh-keyscan -H $VPS_HOST >> ~/.ssh/known_hosts
-          scp -o StrictHostKeyChecking=no ./docker-compose.yml $VPS_USERNAME@$VPS_HOST:/home/$VPS_USERNAME/docker-compose.yml
         
       - name: SSH and Docker commands
         env:
