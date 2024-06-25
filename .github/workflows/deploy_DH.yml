@@ -38,7 +38,8 @@ jobs:
             echo "Frontend pull complete."
             ls -al 
             pwd
-            cd /repo 
+            cd ..
+            pwd
             docker-compose -f docker-compose.yml down
             docker-compose -f docker-compose.yml up -d
             echo "Deployment Complete."
