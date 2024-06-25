@@ -12,9 +12,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          repository: 'aakinonigbinde/homebase'
-          ref: 'main'
 
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
@@ -31,7 +28,7 @@ jobs:
           VPS_SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
           ssh -o StrictHostKeyChecking=no root@141.136.42.157 << 'EOF'
-            scp -r -o StrictHostKeyChecking=no ./* root@141.136.42.157:/repo
+
             ls -al 
             pwd
             echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username aakinonigbinde --password-stdin
@@ -41,7 +38,9 @@ jobs:
             echo "Frontend pull complete."
             ls -al 
             pwd
-            cd ..
+            mkdir /homebase
+            cd ./homebase
+            ls -al
             pwd
             docker-compose -f docker-compose.yml down
             docker-compose -f docker-compose.yml up -d
