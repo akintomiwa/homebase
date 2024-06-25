@@ -33,7 +33,7 @@ jobs:
             echo "Backend pull complete."
             docker pull aakinonigbinde/myapp-frontend:latest
             echo "Frontend pull complete."
-            ls -al /homebase
+            ls -al 
             pwd
             
             docker-compose -f docker-compose.yml down
